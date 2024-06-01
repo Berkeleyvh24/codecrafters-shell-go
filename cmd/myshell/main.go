@@ -12,9 +12,13 @@ func main() {
 	// fmt.Println("Logs from your program will appear here!")
 
 	// Uncomment this block to pass the first stage
-	fmt.Fprint(os.Stdout, "$ ")
 
-	// Wait for user input
-	input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
-	fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimSpace(input))
+	for {
+		fmt.Fprint(os.Stdout, "$ ")
+
+		// Wait for user input
+		input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
+		fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimSpace(input))
+	}
+
 }
