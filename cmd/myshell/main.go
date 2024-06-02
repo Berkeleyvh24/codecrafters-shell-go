@@ -22,23 +22,12 @@ func main() {
 		commands := strings.Split(res, " ")
 		if commands[0] == "exit" {
 			os.Exit(0)
-
 		} else if commands[0] == "type" {
-			// cmd := exec.Command("type", strings.Join(commands[1:], " "))
-			// output, err := cmd.CombinedOutput()
-			// if err != nil {
-			// 	newString := string(output[:])
-			// 	stringArray := strings.Split(newString, " ")
-			// 	finalString := strings.Join(stringArray[4:], " ")
-			// 	fmt.Fprintf(os.Stdout, "%s", strings.Replace(finalString, ":", "", -1))
-			// } else {
-			// 	fmt.Printf("%s", output)
-			// }
 			switch commands[1] {
 			case "exit", "echo", "type":
 				fmt.Printf("%s is a shell builtin\n", commands[1])
 			default:
-				fmt.Printf("%s not found\n", commands[1])
+				DoType(commands[1])
 			}
 		} else if commands[0] == "echo" {
 			fmt.Fprintf(os.Stdout, "%s\n", strings.Join(commands[1:], " "))
@@ -47,4 +36,17 @@ func main() {
 		}
 	}
 
+}
+
+func DoType(param string) {
+	env := os.Getenv("PATH")
+	paths := strings.Split(env, ":")
+	for _, path := range paths {
+		fileDir := path + "/" + param
+		if _, err := os.Stat(fileDir); err == nil {
+			fmt.Fprintf(os.Stdout, "%s is %s\n", param, fileDir)
+			return
+		}
+	}
+	fmt.Fprintf(os.Stdout, "%s: not found\n", param)
 }
