@@ -32,6 +32,12 @@ func main() {
 			}
 		} else if commands[0] == "echo" {
 			fmt.Fprintf(os.Stdout, "%s\n", strings.Join(commands[1:], " "))
+		} else if commands[0] == "pwd" {
+			directory, err := os.Getwd()
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("%s\n", directory)
 		} else {
 			cmd := exec.Command(commands[0], commands[1:]...)
 			cmd.Stderr = os.Stderr
