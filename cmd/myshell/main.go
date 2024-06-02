@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 )
 
@@ -36,9 +37,14 @@ func main() {
 			directory, _ := os.Getwd()
 			fmt.Printf("%s\n", directory)
 		} else if commands[0] == "cd" {
-			err := os.Chdir(commands[1])
+			p := path.Clean(commands[1])
+			if !path.IsAbs(p) {
+				dir, _ := os.Getwd()
+				p = path.Join(dir, p)
+			}
+			err := os.Chdir(p)
 			if err != nil {
-				fmt.Fprintf(os.Stdout, "%s: No such file or directory\n", commands[1])
+				fmt.Printf("%s: No such file or directory\n", p)
 			}
 		} else {
 			cmd := exec.Command(commands[0], commands[1:]...)
