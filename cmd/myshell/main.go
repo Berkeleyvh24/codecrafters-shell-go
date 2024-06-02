@@ -33,11 +33,13 @@ func main() {
 		} else if commands[0] == "echo" {
 			fmt.Fprintf(os.Stdout, "%s\n", strings.Join(commands[1:], " "))
 		} else if commands[0] == "pwd" {
-			directory, err := os.Getwd()
-			if err != nil {
-				fmt.Println(err)
-			}
+			directory, _ := os.Getwd()
 			fmt.Printf("%s\n", directory)
+		} else if commands[0] == "cd" {
+			err := os.Chdir(commands[1])
+			if err != nil {
+				fmt.Fprintf(os.Stdout, "%s: No such file or directory\n", commands[1])
+			}
 		} else {
 			cmd := exec.Command(commands[0], commands[1:]...)
 			cmd.Stderr = os.Stderr
