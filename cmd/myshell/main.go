@@ -38,7 +38,9 @@ func main() {
 			fmt.Printf("%s\n", directory)
 		} else if commands[0] == "cd" {
 			p := path.Clean(commands[1])
-			if !path.IsAbs(p) {
+			if strings.HasPrefix(commands[1], "~") {
+				p = os.Getenv("HOME")
+			} else if !path.IsAbs(p) {
 				dir, _ := os.Getwd()
 				p = path.Join(dir, p)
 			}
